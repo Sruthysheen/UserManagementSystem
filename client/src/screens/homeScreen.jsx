@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 const HomeScreen = () => {
   return (
     <>
-      <div className="relative h-screen bg-center bg-cover" style={{ backgroundImage: "url('../../public/images/blaack.jpg')" }}>
+      <div className="relative h-screen bg-center bg-cover" style={{ backgroundImage: "url('/images/blaack.jpg')" }}>
         <div className="absolute inset-0 flex flex-col items-center justify-between m-5 bg-black bg-opacity-50">
         
           <div className="flex flex-col items-center mt-8 rounded-md bg-neutral-800 bg-opacity-80 lg:w-6/12">

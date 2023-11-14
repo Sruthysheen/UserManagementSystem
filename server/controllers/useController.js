@@ -50,6 +50,7 @@ const loginUser=asyncHandler(async(req,res)=>{
       const isPasswordMatch = await user.isPasswordMatch(password);
 
       if(isPasswordMatch){
+        generateToken(res,user._id)
         res.status(200).json(user)
       }else{
         res.status(400)

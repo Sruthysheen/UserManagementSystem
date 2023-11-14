@@ -1,7 +1,15 @@
 import { Fragment, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLogoutMutation } from '../slices/usersApiSlice'
+import { logout } from '../slices/authSlice'
+
+
+
+
+
 
 const navigation = [
   { name: 'Home', href: '/', current: true },
@@ -9,14 +17,31 @@ const navigation = [
  
 ]
 
+
+
+
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
  const  Header=()=> {
+    const [logoutApiCall]=useLogoutMutation();
+    const dispatch=useDispatch()
+    const navigate=useNavigate()
+  const logoutHandler=async()=>{
+    try {
+      await logoutApiCall().unwrap()
+      dispatch(logout())
+      navigate('/')
+      
+    } catch (error) {
+     console.log(error); 
+    }
     
-    
-    const [user,setUser]=useState(null)
+  }
+    const {userInfo}=useSelector((state)=>state.auth)
+  
   return (
     <Disclosure as="nav" className="bg-black">
       {({ open }) => (
@@ -66,24 +91,35 @@ function classNames(...classes) {
 
               <Menu as="div" className="relative ml-3">
   <div>
-    {user ? (
-    
-      <Menu.Button className="relative flex text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-        <span className="absolute -inset-1.5" />
-        <span className="sr-only">Open user menu</span>
-        <img
-          className="w-8 h-8 rounded-full"
-          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-          alt=""
-        />
-      </Menu.Button>
-    ) : (
-      <>
-      <span className='m-3 text-gray-300'>Sign Up</span>
-      
-      <span className='text-gray-300 '>Log in</span>
-      </>
-    )}
+   
+    {userInfo ? (
+  <div className="flex items-center">
+    <div className="mr-2 text-white">
+      {userInfo.name}
+    </div>
+
+    <Menu.Button className="relative flex text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+      <span className="absolute -inset-1.5" />
+      <span className="sr-only">Open user menu</span>
+      <img
+        className="w-8 h-8 rounded-full"
+        
+        src={userInfo.profile ?userInfo.profile : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"  }
+        alt={`Profile of ${userInfo.name}`}
+      />
+    </Menu.Button>
+  </div>
+) : (
+  <>
+    <Link to="/signup">
+      <span className="m-3 text-gray-300">Sign Up</span>
+    </Link>
+    <Link to="/login">
+      <span className="text-gray-300">Log in</span>
+    </Link>
+  </>
+)}
+
   </div>
 
                   <Transition
@@ -95,35 +131,20 @@ function classNames(...classes) {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="absolute right-0 z-10 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="absolute right-0 z-10 w-48 py-1 mt-2 origin-top-right bg-gray-100 shadow-lg rounded-1md ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Your Profile
-                          </a>
+                           <Link to="/profile" className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
+                           Your Profile
+                         </Link>
                         )}
                       </Menu.Item>
+                      
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Settings
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Sign out
-                          </a>
+                           <span onClick={logoutHandler} className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
+                         log out
+                         </span>
                         )}
                       </Menu.Item>
                     </Menu.Items>
