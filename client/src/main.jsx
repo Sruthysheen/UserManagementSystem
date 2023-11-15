@@ -10,6 +10,7 @@ import LoginScreen from './screens/loginScreens.jsx'
 import SignupScreen from './screens/signupScreen.jsx'
 import UserProfile from './screens/Prodile.jsx'
 import PrivetRoute from './components/PrivetRoute.jsx'
+import EditProdile from './screens/EditProfile.jsx'
 
 const router=createBrowserRouter(
   createRoutesFromElements(
@@ -19,7 +20,8 @@ const router=createBrowserRouter(
       <Route path='/signup' element={<SignupScreen/>}/>
 
       <Route path='' element={<PrivetRoute/>}>
-      <Route path='/profile' elemet={<UserProfile/>}/>
+      <Route path='/profile' element={<UserProfile/>}/>
+      <Route path='/editprofile' element={<EditProdile/>}/>
 
       </Route>
     

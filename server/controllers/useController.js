@@ -62,7 +62,7 @@ const loginUser=asyncHandler(async(req,res)=>{
 
 
 const updateUser = asyncHandler(async (req, res) => {
-    
+    console.log('hello');
 const id=req.user._id
     const user = await User.findById(id);
 const body=req.body
@@ -110,11 +110,32 @@ res.status(200).json(user)
    
 })
 
+const updateProfile=asyncHandler(async(req,res)=>{
+   
+    const file=req.file.filename
+    console.log(file,'thids is file'); 
+    const id=req.user._id
+    const user = await User.findById(id);
+console.log('this is user',user);
+    if(!user){
+        throw new Error('user is not valid')
+    }
+    user.profile=file
+    const updateUser=await user.save()
+
+res.status(200).json(updateUser)
+
+
+    console.log('file',file);
+})
+
+
 export {
     authUser,
     createUser,
     loginUser,
     updateUser,
     logoutUser,
-    getUser
+    getUser,
+    updateProfile
 }
