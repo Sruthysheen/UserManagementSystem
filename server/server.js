@@ -5,7 +5,7 @@ import userRouter  from './routes/useRouter.js'
 import { notFound,errorHandler } from "./middleware/errorMiddleware.js";
 import dbConnect from "./config/db.js";
 import cookieParser from "cookie-parser";
-
+import adminRouter from './routes/adminRouter.js'
 
 
 
@@ -20,7 +20,7 @@ app.use(cors())
 app.use(cookieParser())
 app.use(express.static('server/public/'))
 app.use('/api/user',userRouter)
-
+app.use('/api/admin',adminRouter)
 
 //error handler
 app.use(notFound);

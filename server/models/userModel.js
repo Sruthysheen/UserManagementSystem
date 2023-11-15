@@ -17,6 +17,10 @@ const userSchema= mongoose.Schema({
     profile:{
         type:String,
 
+    },
+    isAdmin:{
+      type:Number,
+      default:0
     }
 }, {
     timestamps: true  
