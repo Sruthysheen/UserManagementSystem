@@ -42,3 +42,15 @@ export const editUser = async (data) => {
     throw new Error('Failed to edit user');
   }
 };
+
+
+export const deletUser =async (data)=>{
+ try {
+    const res= await axios.post(`${ADMIN_URL}/deletUser`,data)
+
+    return res.data
+ } catch (error) {
+    console.error('Edit user error:', error);
+    throw new Error('Failed to delete user');
+ }  
+}

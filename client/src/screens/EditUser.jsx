@@ -1,13 +1,42 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { editUser } from "../slices/adminApiSlice";
+import { useNavigate } from "react-router-dom";
 
 const EditUser=()=>{
     
-
+const navigate=useNavigate()
+    const {userForEdit}=useSelector((state)=>state.auth)
     
-    
-    const [name,setName]=useState();
-  const [email,setEmail]=useState();
-    const handleSubmit=()=>{
+    const [name,setName]=useState('');
+  const [email,setEmail]=useState('');
+  
+  
+  
+  useEffect(()=>{
+    setName(userForEdit.name)
+    setEmail(userForEdit.email)
+  },[userForEdit.name,userForEdit.email])
+  
+  
+  
+    const handleSubmit=async(e)=>{
+        e.preventDefault();
+        
+        const data={
+            name,
+            email,
+            userForEdit
+        }
+        
+    try {
+     await  editUser(data)
+      navigate('/admin')
+        
+    } catch (error) {
+        console.log('this  is eroor',error.message);
+    }
+        
         
     }
     return (

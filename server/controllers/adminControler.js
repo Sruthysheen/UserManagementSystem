@@ -50,7 +50,9 @@ const listUser=asyncHandler(async(req,res)=>{
 
 
 const editUser=asyncHandler(async(req,res)=>{
-    const id=req.body.id;
+   
+    const id=req.body.userForEdit._id;
+   
 const body=req.body
     const user=await User.findById(id)
     if (!user) {
@@ -62,9 +64,22 @@ const body=req.body
     user.email = body.email || user.email;
 
     const updatedUser=await user.save()
+   
 res.status(200).json(updatedUser)
 
     
+
+})
+
+
+
+const deletUser=asyncHandler(async(req,res)=>{
+   
+const id=req?.body?._id
+const user=await User.findByIdAndDelete(id)
+
+res.status(200).json(user)
+
 
 })
 
@@ -74,7 +89,8 @@ export {
     logout,
     listUser,
     editUser,
-    
+    deletUser
+
 }
 
 

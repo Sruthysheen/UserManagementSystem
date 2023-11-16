@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Card, Typography } from "@material-tailwind/react";
-import { listUser } from "../slices/adminApiSlice";
-
+import { deletUser, editUser, listUser } from "../slices/adminApiSlice";
+import { userDetails } from "../slices/authSlice";
 const TABLE_HEAD = ["Name", "Email", "Created At", "", ""];
 
 const AdminHome = () => {
   const [users, setUsers] = useState([]);
   const { adminInfo } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-
+const dispatch=useDispatch()
   useEffect(() => {
     if (!adminInfo) {
       navigate('/adminLogin');
@@ -35,10 +35,35 @@ const AdminHome = () => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
+
+    const edit=async(user)=>{
+        dispatch(userDetails(user))
+       
+        navigate('/editUser')
+       }
+    
+       
+       const handleDelete=async (user)=>{
+      try {
+        const res=await deletUser(user)
+        setUsers((prevUsers) => prevUsers.filter((u) => u._id !== user._id));
+        navigate('/admin')
+      } catch (error) {
+        throw new Error ('Failed to delete user')
+      }
+        
+       }
+ 
+ 
   return (
+
+    
     <div className="relative h-screen bg-center bg-cover" style={{ backgroundImage: "url('/images/blaack.jpg')" }}>
       <div className="absolute inset-0 flex flex-col items-center justify-between m-5 bg-black bg-opacity-50">
         <div className="flex flex-col items-center rounded-md bg-neutral-800 bg-opacity-80 lg:w-6/12">
+            <br />
+            <br />
+            <br />
           <Card className="w-full h-full overflow-auto">
             <table className="w-full text-left table-auto min-w-max bg-neutral-200 bg-opacity-80">
               <thead>
@@ -54,32 +79,32 @@ const AdminHome = () => {
               </thead>
               <tbody>
                 {users ? (
-                  users.map(({ _id, name, email, createdAt }) => (
-                    <tr key={_id}>
+                  users.map((user) => (
+                    <tr key={user._id}>
                       <td className="p-4 border-b border-blue-gray-50">
                         <Typography variant="small" color="blue-gray" className="font-normal">
-                          {name}
+                          {user.name}
                         </Typography>
                       </td>
                       <td className="p-4 border-b border-blue-gray-50">
                         <Typography variant="small" color="blue-gray" className="font-normal">
-                          {email}
+                          {user.email}
                         </Typography>
                       </td>
                       <td className="p-4 border-b border-blue-gray-50">
                         <Typography variant="small" color="blue-gray" className="font-normal">
-                          {formatDate(createdAt)}
+                          {formatDate(user.createdAt)}
                         </Typography>
                       </td>
                       <td className="p-4 border-b border-blue-gray-50">
-                        <Link to='/editUser'>
-                        <Typography as="a"  variant="small" color="blue-gray" className="font-medium">
+                       
+                        <Typography onClick={()=>edit(user)} as="a"  variant="small" color="blue-gray" className="font-medium">
                           Edit
                         </Typography>
-                        </Link>
+                       
                       </td>
                       <td className="p-4 border-b border-blue-gray-50">
-                        <Typography as="a"  variant="small" color="blue-gray" className="font-medium">
+                        <Typography onClick={()=>handleDelete(user)} as="a"  variant="small" color="blue-gray" className="font-medium">
                           Delete
                         </Typography>
                       </td>
