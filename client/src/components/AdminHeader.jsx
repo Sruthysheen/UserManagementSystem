@@ -3,7 +3,7 @@ import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Fragment, useState } from 'react'
+import { Fragment, useState} from 'react'
 import { adminLogoutb } from '../slices/adminApiSlice';
 import { adminLogout } from '../slices/authSlice'
 import { toast } from 'react-toastify';

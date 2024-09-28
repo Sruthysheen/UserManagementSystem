@@ -26,7 +26,7 @@ const UserProfile = () => {
      
     
     
-
+    
       <main className="profile-page">
         <section className="relative block h-500-px">
           <div className="absolute top-0 w-full h-full bg-center bg-cover" style={{

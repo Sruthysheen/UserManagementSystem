@@ -84,12 +84,42 @@ res.status(200).json(user)
 })
 
 
+const searchUser = asyncHandler(async (req, res) => {
+    const { query } = req.body;
+    console.log(query,'this is query-------');
+
+
+    const users = await User.find({
+      name: { $regex: new RegExp(query, 'i') },
+  }).sort({ name: 1 });
+
+  console.log(users, 'this is users00000');
+
+
+   
+    res.status(200).json(users);
+  });
+
+   // const users = await User.find({
+    //   $and: [
+    //     {
+    //       $or: [
+    //     { name: { $regex: new RegExp(query, 'i') } },
+    //     { email: { $regex: new RegExp(query, 'i') } },
+    //   ],
+    //     },
+    //     { isAdmin: { $ne: 1 } }, 
+    //   ],
+    // });
+    // console.log(users,'------------------');
+
 export {
     login,
     logout,
     listUser,
     editUser,
-    deletUser
+    deletUser,
+    searchUser
 
 }
 

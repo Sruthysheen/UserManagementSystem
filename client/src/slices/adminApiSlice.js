@@ -33,6 +33,22 @@ export const listUser = async () => {
   }
 };
 
+
+
+export const searchUser = async (query) => {
+  try {
+    const response = await axios.post(`${ADMIN_URL}/searchUser`, { query });
+    return response.data;
+  } catch (error) {
+    console.error('Search user error:', error);
+    throw new Error('Failed to search users');
+  }
+};
+
+
+
+
+
 export const editUser = async (data) => {
   try {
     const response = await axios.post(`${ADMIN_URL}/editUser`, data);
